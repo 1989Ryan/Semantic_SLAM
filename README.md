@@ -15,7 +15,7 @@ scripts/
 src/
 Third_Part/
     ORB_SLAM/
-    PSPNet_Keras_tensorflow
+    PSPNet_Keras_tensorflow/
 test/
 .gitignore
 README.md
