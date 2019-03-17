@@ -1,6 +1,6 @@
 # Semantic SLAM
 
-This is the implementation of Semantic SLAM using ORB SLAM and PSPNet101. 
+This on-going project is Semantic SLAM using ROS, ORB SLAM and PSPNet101. Will be used in Robotics for semantic understanding and navigation.
 
 ## Acknowledgement 
 
