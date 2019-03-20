@@ -20,3 +20,12 @@ test/
 .gitignore
 README.md
 ```
+
+## TODO list
+
+* Publish the cloud point infomation
+* Encode the cloud point and visual descriptor with semantic information
+* Clustering the cloud point to a single location
+* Visualize the result
+* Run in the KITTI dataset 
+* Run in XJTU campus
