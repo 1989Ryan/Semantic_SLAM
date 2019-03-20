@@ -21,11 +21,13 @@ test/
 README.md
 ```
 
-## TODO list
+## TODO
 
 * Publish the cloud point infomation
 * Encode the cloud point and visual descriptor with semantic information
-* Clustering the cloud point to a single location
+* Clustering the cloud points into a single location point
 * Visualize the result
-* Run in the KITTI dataset 
+* Run in the KITTI dataset
 * Run in XJTU campus
+* Connect all the elements into a single project
+* Inference accelerate
