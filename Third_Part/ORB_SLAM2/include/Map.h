@@ -75,6 +75,8 @@ public:
 
     // Save map information into a binary file.
     void Save( const string &filename );
+    // Save map information into a text file
+    void SavePoint( const string &filename );
 
     // Load map from a binary file.
     void Load( const string &filename, SystemSetting* mySystemSetting, KeyFrameDatabase* mpKeyFrameDatabase);
@@ -84,6 +86,7 @@ public:
 protected:
 
     void SaveMapPoint( ofstream &f, MapPoint* mp );
+    void SaveMapPointtxt( ofstream & f, MapPoint * mp);
     void SaveKeyFrame( ofstream &f, KeyFrame* kf );
 
     std::set<MapPoint*> mspMapPoints;

@@ -130,6 +130,23 @@ void Map::clear()
     mvpKeyFrameOrigins.clear();
 }
 
+void Map::SavePoint( const string& filename )
+{
+    cerr<<"Map.cc :: MapPoint Saving to "<<filename <<endl;
+    ofstream f;
+    f.open(filename.c_str());
+    
+    unsigned long int nMapPoints = mspMapPoints.size();
+    f.write((char*)&nMapPoints, sizeof(nMapPoints) );
+    //save mappoint sequentially
+    for ( auto mp: mspMapPoints ){
+	SaveMapPointtxt( f, mp);
+    }
+    cerr << "Map.cc :: The number of MapPoint is :" << mspMapPoints.size() << endl;
+    f.close();
+    cerr<<"Map.cc :: Map Saving Finished!"<<endl;
+}
+
 void Map::Save ( const string& filename )
 {
     //Print the information of the saving map
@@ -200,6 +217,12 @@ void Map::SaveMapPoint( ofstream& f, MapPoint* mp)
     f.write((char*)& mpWorldPos.at<float>(0),sizeof(float));
     f.write((char*)& mpWorldPos.at<float>(1),sizeof(float));
     f.write((char*)& mpWorldPos.at<float>(2),sizeof(float));
+}
+
+void Map::SaveMapPointtxt( ofstream & f, MapPoint * mp)
+{
+    cv::Mat mpWorldPos = mp->GetWorldPos();
+    f<<setprecision(9)<< mpWorldPos.at<float>(0)<<" "<<mpWorldPos.at<float>(1)<<" "<<mpWorldPos.at<float>(2)<<endl;
 }
 
 void Map::SaveKeyFrame( ofstream &f, KeyFrame* kf )

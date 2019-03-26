@@ -65,6 +65,7 @@ int main(int argc, char **argv)
 
     ros::NodeHandle nodeHandler;
     ros::Subscriber sub = nodeHandler.subscribe("/camera/image_raw", 1, &ImageGrabber::GrabImage,&igb);
+    //ros::Publisher pub = nodeHandler.publish("MapPoint");
 
     ros::spin();
 
@@ -75,6 +76,7 @@ int main(int argc, char **argv)
     SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory_TUM_Format.txt");
     SLAM.SaveTrajectoryTUM("FrameTrajectory_TUM_Format.txt");
     SLAM.SaveMap("MapPointandKeyFrame.bin");
+    SLAM.SavePoint("MapPoint.txt");
 
 
     ros::shutdown();

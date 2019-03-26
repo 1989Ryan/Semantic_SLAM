@@ -117,6 +117,7 @@ public:
     // TODO: Save/Load functions
     // SaveMap(const string &filename);
     void SaveMap(const string &filename); 
+    void SavePoint(const string &filename);
 
     // LoadMap(const string &filename);
     void LoadMap(const string &filename, SystemSetting* mySystemSetting);

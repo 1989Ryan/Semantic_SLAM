@@ -619,6 +619,12 @@ void System::SaveMap(const string &filename)
     mpMap->Save(filename);
 }
 
+void System::SavePoint(const string &filename)
+{
+    cout<<"I am saving points!"<<endl;
+    mpMap->SavePoint(filename);
+}
+
 // void System::LoadMap(const string &filename,SystemSetting* mySystemSetting)  
 // {
 //     mpMap->Load(filename, mySystemSetting); 

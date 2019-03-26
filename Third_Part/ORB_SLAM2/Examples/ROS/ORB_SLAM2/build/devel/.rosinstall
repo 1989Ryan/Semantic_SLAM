@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/zzr/semantic-SLAM/Third_Part/ORB_SLAM2/Examples/ROS/ORB_SLAM2/build/devel/setup.sh
