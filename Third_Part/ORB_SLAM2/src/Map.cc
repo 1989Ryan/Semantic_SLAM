@@ -137,7 +137,6 @@ void Map::SavePoint( const string& filename )
     f.open(filename.c_str());
     
     unsigned long int nMapPoints = mspMapPoints.size();
-    f.write((char*)&nMapPoints, sizeof(nMapPoints) );
     //save mappoint sequentially
     for ( auto mp: mspMapPoints ){
 	SaveMapPointtxt( f, mp);
