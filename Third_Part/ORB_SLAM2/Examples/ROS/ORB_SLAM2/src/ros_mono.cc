@@ -23,6 +23,10 @@
 #include<algorithm>
 #include<fstream>
 #include<chrono>
+#include <sensor_msgs/PointCloud.h>
+#include <geometry_msgs/Point.h>
+
+#include<mutex>
 
 #include<ros/ros.h>
 #include <cv_bridge/cv_bridge.h>
@@ -33,8 +37,11 @@
 #include<opencv2/core/core.hpp>
 
 #include"../../../include/System.h"
+#include"../../../include/MapPoint.h"
+#include"../../../include/Map.h"
 
 using namespace std;
+using namespace ORB_SLAM2;
 
 class ImageGrabber
 {
@@ -42,8 +49,20 @@ public:
     ImageGrabber(ORB_SLAM2::System* pSLAM):mpSLAM(pSLAM){}
 
     void GrabImage(const sensor_msgs::ImageConstPtr& msg);
+    void pubandsub()
+    {
+        pub_ = n_.advertise<sensor_msgs::PointCloud>("/mappoint", 1000);
+        sub_ = n_.subscribe("/camera/image_raw", 1, &ImageGrabber::GrabImage, this);
+    }
 
     ORB_SLAM2::System* mpSLAM;
+
+private:
+    ros::NodeHandle n_;
+    ros::Publisher pub_;
+    ros::Subscriber sub_;
+    sensor_msgs::PointCloud mpt;
+    int count;
 };
 
 int main(int argc, char **argv)
@@ -62,10 +81,9 @@ int main(int argc, char **argv)
     ORB_SLAM2::System SLAM(argv[1],argv[2],ORB_SLAM2::System::MONOCULAR,true);
 
     ImageGrabber igb(&SLAM);
-
-    ros::NodeHandle nodeHandler;
-    ros::Subscriber sub = nodeHandler.subscribe("/camera/image_raw", 1, &ImageGrabber::GrabImage,&igb);
-    //ros::Publisher pub = nodeHandler.publish("MapPoint");
+    igb.pubandsub();
+    //ros::NodeHandle nodeHandler;
+    //ros::Subscriber sub = nodeHandler.subscribe("/camera/image_raw", 1, &ImageGrabber::GrabImage,&igb);
 
     ros::spin();
 
@@ -99,6 +117,40 @@ void ImageGrabber::GrabImage(const sensor_msgs::ImageConstPtr& msg)
     }
 
     mpSLAM->TrackMonocular(cv_ptr->image,cv_ptr->header.stamp.toSec());
+    if (mpSLAM->GetTrackingState()==2){
+    vector<cv::Mat> mppos = mpSLAM->GetTrackedMapPointsPose();
+    int i = 0;
+    int num_points = mppos.size();
+    mpt.header.stamp = ros::Time::now();
+    mpt.header.frame_id = "sensor_frame";
+    mpt.points.resize(num_points);
+    //we'll also add an intensity channel to the cloud
+    mpt.channels.resize(1);
+    mpt.channels[0].name = "rgb";
+    mpt.channels[0].values.resize(num_points);
+    for(auto mp: mppos)
+    {
+        /*
+        int x = 10000*mp.at<float>(0);
+        int y = 10000*mp.at<float>(1);
+        int z = 10000*mp.at<float>(2);
+        cout<<"good 4"<<endl;
+        cout<<x<<" "<<y<<" "<<z<<endl;
+        //mpt.points[i].x = x*0000.1;
+        //mpt.points[i].y = y*0000.1;
+        //mpt.points[i].z = z*0000.1;
+        */
+        mpt.points[i].x = mp.at<float>(0);
+        mpt.points[i].y = mp.at<float>(1);
+        mpt.points[i].z = mp.at<float>(2);
+        
+        i++;
+        
+       //cout<<mp.at<float>(0)<<mp.at<float>(1)<<mp.at<float>(2)<<endl;
+    }
+    //vector<cv::KeyPoint> kp = mpSLAM.GetTrackedKeyPointsUn();
+
+    //n = mappoints.size();
+    pub_.publish(mpt);
+    }
 }
-
-

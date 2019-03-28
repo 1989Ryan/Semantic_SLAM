@@ -661,4 +661,16 @@ vector<cv::KeyPoint> System::GetTrackedKeyPointsUn()
     return mTrackedKeyPointsUn;
 }
 
+vector<cv::Mat> System::GetTrackedMapPointsPose()
+{
+    vector<cv::Mat> p;
+    const vector<MapPoint*> &vpMPs = mpMap->GetAllMapPoints();
+    if(vpMPs.empty())
+    {
+        p.clear();
+        return p;
+    }
+    p = mpMap->GetmpPose();
+    return p;
+}
 } //namespace ORB_SLAM

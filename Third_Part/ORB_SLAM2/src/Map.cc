@@ -136,7 +136,8 @@ void Map::SavePoint( const string& filename )
     ofstream f;
     f.open(filename.c_str());
     
-    unsigned long int nMapPoints = mspMapPoints.size();
+    //unsigned long int nMapPoints = mspMapPoints.size();
+    //f.write((char*)&nMapPoints, sizeof(nMapPoints) );
     //save mappoint sequentially
     for ( auto mp: mspMapPoints ){
 	SaveMapPointtxt( f, mp);
@@ -155,7 +156,6 @@ void Map::Save ( const string& filename )
 
     //Number of MapPoints
     unsigned long int nMapPoints = mspMapPoints.size();
-    f.write((char*)&nMapPoints, sizeof(nMapPoints) );
     //Save MapPoint sequentially
     for ( auto mp: mspMapPoints ){
         //Save MapPoint
@@ -399,6 +399,19 @@ void Map::Load ( const string &filename, SystemSetting* mySystemSetting, KeyFram
     f.close();
     cerr<<"Map.cc :: Load IS OVER!"<<endl;
     return;
+}
+
+vector<cv::Mat> Map::GetmpPose()
+{
+    unique_lock<mutex> lock(mMutexMap);
+    vector<cv::Mat> mspMapPointPose;
+    long unsigned int i = 0;
+    for(auto mp: mspMapPoints){
+        cv::Mat p = mp->GetWorldPos();
+        mspMapPointPose.push_back(p);
+        i++;
+    }
+    return mspMapPointPose;
 }
 
 MapPoint* Map::LoadMapPoint( ifstream &f )

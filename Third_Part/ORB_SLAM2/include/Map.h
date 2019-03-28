@@ -58,6 +58,7 @@ public:
     std::vector<KeyFrame*> GetAllKeyFrames();
     std::vector<MapPoint*> GetAllMapPoints();
     std::vector<MapPoint*> GetReferenceMapPoints();
+    std::vector<cv::Mat> GetmpPose();
 
     long unsigned int MapPointsInMap();
     long unsigned  KeyFramesInMap();
@@ -82,6 +83,7 @@ public:
     void Load( const string &filename, SystemSetting* mySystemSetting, KeyFrameDatabase* mpKeyFrameDatabase);
     MapPoint* LoadMapPoint( ifstream &f );
     KeyFrame* LoadKeyFrame( ifstream &f, SystemSetting* mySystemSetting );
+    std::vector<cv::Mat> mspMapPointPose;
 
 protected:
 
@@ -91,6 +93,7 @@ protected:
 
     std::set<MapPoint*> mspMapPoints;
     std::set<KeyFrame*> mspKeyFrames;
+
 
     std::vector<MapPoint*> mvpReferenceMapPoints;
 

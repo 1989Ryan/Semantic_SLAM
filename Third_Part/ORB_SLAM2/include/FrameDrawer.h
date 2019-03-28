@@ -41,7 +41,7 @@ class FrameDrawer
 {
 public:
     FrameDrawer(Map* pMap);
-
+    vector<cv::KeyPoint> CurrentKeysSend(Tracking *pTracker);
     // Update info from the last processed frame.
     void Update(Tracking *pTracker);
 

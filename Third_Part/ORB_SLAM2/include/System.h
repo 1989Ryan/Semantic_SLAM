@@ -25,7 +25,6 @@
 #include<string>
 #include<thread>
 #include<opencv2/core/core.hpp>
-
 #include "Tracking.h"
 #include "FrameDrawer.h"
 #include "MapDrawer.h"
@@ -132,6 +131,7 @@ public:
     void SetSaveImageFlag();
     void SetViewerIMUFlagTrue();
     void SetViewerIMUFlagFalse();
+    std::vector<cv::Mat> GetTrackedMapPointsPose();
 
 private:
 

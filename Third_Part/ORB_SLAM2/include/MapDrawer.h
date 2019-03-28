@@ -45,6 +45,7 @@ public:
     void SetReferenceKeyFrame(KeyFrame *pKF);
     void GetCurrentOpenGLCameraMatrix(pangolin::OpenGlMatrix &M);
 
+
 private:
 
     float mKeyFrameSize;
@@ -53,6 +54,7 @@ private:
     float mPointSize;
     float mCameraSize;
     float mCameraLineWidth;
+   
 
     cv::Mat mCameraPose;
 

@@ -20,6 +20,7 @@
 
 #include "FrameDrawer.h"
 #include "Tracking.h"
+#include<vector>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -297,6 +298,11 @@ void FrameDrawer::DrawTextInfo(cv::Mat &im, int nState, cv::Mat &imText)
 
 }
 
+vector<cv::KeyPoint> FrameDrawer::CurrentKeysSend(Tracking *pTracker)
+{
+    return pTracker->mCurrentFrame.mvGoodDescriptor;
+}
+
 void FrameDrawer::Update(Tracking *pTracker)
 {
     unique_lock<mutex> lock(mMutex);
@@ -369,5 +375,6 @@ void FrameDrawer::Update(Tracking *pTracker)
     }
     mState=static_cast<int>(pTracker->mLastProcessedState);
 }
+
 
 } //namespace ORB_SLAM
