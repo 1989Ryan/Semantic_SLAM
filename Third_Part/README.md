@@ -14,3 +14,11 @@ To run the PSPNet in ROS, you have to install the following packages.
 ## Semantic Image Publisher
 
 Run ``python Semantic_Information_Publisher.py image:={the image topic you provide}`` to publish the segmented images.
+
+## Cloud Publish
+
+Run ``ros_mono.cc`` to publish the cloud point.
+
+You can visualize the result with Rviz.
+
+![](https://github.com/1989Ryan/Semantic_SLAM/blob/master/Third_Part/Screenshot%20from%202019-03-29%2013-20-20.png?raw=true)
