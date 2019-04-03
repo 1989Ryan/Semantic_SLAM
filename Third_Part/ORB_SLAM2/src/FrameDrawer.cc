@@ -135,6 +135,7 @@ cv::Mat FrameDrawer::DrawFrame()
                 // This is a match to a MapPoint in the map
                 if(vbMap[i])
                 {
+
                     cv::rectangle(im,pt1,pt2,cv::Scalar(0,255,0)); //BGR
                     cv::circle(im,vCurrentKeys[i].pt,1,cv::Scalar(0,255,0),-1);
                     mnTracked++;
@@ -346,6 +347,11 @@ void FrameDrawer::Update(Tracking *pTracker)
                         mvbMap[i]=true;
                     else
                         mvbVO[i]=true;
+                    cv::Point3f temp;
+                    temp.x = mvCurrentKeys[i].pt.x;
+                    temp.y = mvCurrentKeys[i].pt.y;
+                    temp.z = i;
+                    pTracker->mCurrentFrame.GoodKeyPointinfo.push_back(temp);
                 }
                 else{
                     mvbUselessPoint[i]=true;  // For debug use

@@ -673,4 +673,10 @@ vector<cv::Mat> System::GetTrackedMapPointsPose()
     p = mpMap->GetmpPose();
     return p;
 }
+
+vector<cv::Point3f> System::GetGoodKeyPoints()
+{
+    return mpTracker->mCurrentFrame.SendGoodKeyPointinfo();
+}
+
 } //namespace ORB_SLAM

@@ -724,4 +724,9 @@ void Frame::SaveGoodDescriptor(const float &x, const float  &y, const float  &r)
     mvGoodDescriptor.push_back(kp);
 }
 
+vector<cv::Point3f> Frame::SendGoodKeyPointinfo()
+{
+    return GoodKeyPointinfo;
+}
+
 } //namespace ORB_SLAM
