@@ -15,7 +15,7 @@ Haven't tested yet.
 class map_engine:
     def __init__(self):
         self._cv_bridge = CvBridge()
-        self._sub3 = rospy.Subscriber('categorymap', Image, self.callback, queue_size = 1000)
+        self._sub = rospy.Subscriber('categorymap', Image, self.callback, queue_size = 1000)
         self._sub1 = rospy.Subscriber('KeyPoints', PointCloud, self.callback1, queue_size = 1000)
         self._sub2 = rospy.Subscriber('MapPoints', PointCloud, self.callback2, queue_size = 1000)
         self._pub = rospy.Publisher('Semantic_Map', PointCloud, queue_size=1)
