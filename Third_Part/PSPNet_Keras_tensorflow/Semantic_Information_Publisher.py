@@ -22,7 +22,8 @@ class Semantic_Imformation_Publisher():
                                        weights='pspnet101_cityscapes')
         init = tf.global_variables_initializer()
         self._session.run(init)
-        self._sub = rospy.Subscriber('image', Image, self.callback, queue_size = 1)
+        self._sub = rospy.Subscriber('image', Image, self.callback, queue_size = 1000)
+        self._pub2 = rospy.Publisher('cm', Image, queue_size=1)
         self._pub = rospy.Publisher('result', Image, queue_size = 1)
     
     def callback(self, image_msg):
@@ -37,12 +38,14 @@ class Semantic_Imformation_Publisher():
                                  order=1, prefilter=False)
         #probs = self.pspnet.predict(cv_image)
         rospy.loginfo("running")
-        cm = np.argmax(probs, axis=2)
-        pm = np.max(probs, axis=2)
-        color_cm = utils.add_color(cm)
-        alpha_blended = 0.5 * color_cm * 255 + 0.5 * cv_image
-        alpha_blended = self._cv_bridge.cv2_to_imgmsg(alpha_blended)
-        self._pub.publish(alpha_blended)
+        cm = np.argmax(probs, axis=2).astype(np.int32)
+        #pm = np.max(probs, axis=2)
+        #color_cm = utils.add_color(cm)
+        #alpha_blended = 0.5 * color_cm * 255 + 0.5 * cv_image
+        #alpha_blended = self._cv_bridge.cv2_to_imgmsg(alpha_blended)
+        category = self._cv_bridge.cv2_to_imgmsg(cm)
+        self._pub.publish(image_msg)
+        self._pub2.publish(category)
     
 
     def img_proc(self, img):
@@ -53,6 +56,7 @@ class Semantic_Imformation_Publisher():
         img = img.astype('float32')
         data = np.expand_dims(img, 0)
         return data
+        
 
     def main(self):
         rospy.spin()
