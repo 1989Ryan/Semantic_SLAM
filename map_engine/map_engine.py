@@ -30,8 +30,9 @@ class map_engine:
 
     def callback1(self, pointcloud_msg):
         self._kp = pointcloud_msg
+        cv_image = self._cv_bridge.imgmsg_to_cv2(self._currentframe, "bgr8")
         for i in range(self._kp):
-            if self._currentframe[i.points.x,i.points.y] == 11:
+            if cv_image[i.points.x,i.points.y] == 11:
                 self.smp.points.append(i)
             self.smp.header = self._mp.header
         self._pub.publish(self.smp)
