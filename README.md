@@ -13,8 +13,8 @@ The implementation of [PSPNet by keras](https://github.com/Vladkryvoruchko/PSPNe
 ## Project Structure
 
 ```
-scripts/
-src/
+map_engine/
+    map_engine.py
 Third_Part/
     ORB_SLAM/
     PSPNet_Keras_tensorflow/
