@@ -24,7 +24,6 @@ class map_engine:
         self._kp = PointCloud()
         self.smp = PointCloud()
 
-
     def callback(self, image_msg):
         self._currentframe = image_msg
 
@@ -42,4 +41,9 @@ class map_engine:
     
     def main(self):
         rospy.spin()
+    
+if __name__ == '__main__':
+    rospy.init_node('map_engine')
+    engine = map_engine()
+    engine.main()
     
