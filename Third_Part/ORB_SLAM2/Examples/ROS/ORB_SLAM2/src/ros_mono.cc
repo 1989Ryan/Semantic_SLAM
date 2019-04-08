@@ -132,6 +132,7 @@ void ImageGrabber::GrabImage(const sensor_msgs::ImageConstPtr& msg)
             mpt.points[i].x = mp.at<float>(0);
             mpt.points[i].y = mp.at<float>(1);
             mpt.points[i].z = mp.at<float>(2);
+            mpt.channels[0].values[i] = mp.at<float>(3);
             i++;
         }
         i = 0;
