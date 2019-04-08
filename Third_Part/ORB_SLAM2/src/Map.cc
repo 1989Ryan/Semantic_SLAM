@@ -407,7 +407,13 @@ vector<cv::Mat> Map::GetmpPose()
     vector<cv::Mat> mspMapPointPose;
     long unsigned int i = 0;
     for(auto mp: mspMapPoints){
-        cv::Mat p = mp->GetWorldPos();
+        cv::Mat p = cv::Mat::zeros(4,1,CV_32F);
+        for(int k = 0; k < 3; k++){
+            float* P = p.ptr<float>(k);
+            P[0] = mp->GetWorldPos().at<float>(k);
+        }
+        float* P = p.ptr<float>(3);
+        P[0] = mp->mnId;
         mspMapPointPose.push_back(p);
         i++;
     }

@@ -1577,6 +1577,7 @@ void Tracking::CreateNewKeyFrame()
                     pNewMP->ComputeDistinctiveDescriptors();
                     pNewMP->UpdateNormalAndDepth();
                     mpMap->AddMapPoint(pNewMP);
+                    //if()
 
                     mCurrentFrame.mvpMapPoints[i]=pNewMP;
                     nPoints++;

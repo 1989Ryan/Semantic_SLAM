@@ -350,8 +350,9 @@ void FrameDrawer::Update(Tracking *pTracker)
                     cv::Point3f temp;
                     temp.x = mvCurrentKeys[i].pt.x;
                     temp.y = mvCurrentKeys[i].pt.y;
-                    temp.z = i;
+                    temp.z = pMP->mnId;
                     pTracker->mCurrentFrame.GoodKeyPointinfo.push_back(temp);
+                    //pTracker->mCurrentFrame.GoodMapPointinfo.
                 }
                 else{
                     mvbUselessPoint[i]=true;  // For debug use
