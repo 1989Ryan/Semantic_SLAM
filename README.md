@@ -32,6 +32,15 @@ test/
 README.md
 ```
 
+## RUN
+
+You can run the script ``run.sh`` to use the system. You have to provide the rostopic ``/camera/image_raw``
+```
+cd Semantic_SLAM/
+chmod +x run.sh
+./run.sh
+```
+
 ## TODO
 
 * ~~Publish the cloud point infomation~~
