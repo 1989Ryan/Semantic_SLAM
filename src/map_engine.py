@@ -6,7 +6,7 @@ import cv2
 from cv_bridge import CvBridge
 from std_msgs.msg import String
 from sensor_msgs.msg import Image
-from sensor_msgs.msg import PointCloud
+from sensor_msgs.msg import PointCloud, ChannelFloat32
 sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
 
 '''
@@ -24,6 +24,8 @@ class map_engine:
         self._mp = PointCloud()
         self._kp = PointCloud()
         self.smp = PointCloud()
+        self.smp.channels = [ChannelFloat32()]
+        self.smp.channels[0].name = 'rgb8'
 
     def callback(self, image_msg):
         self._currentframe = image_msg
@@ -31,22 +33,35 @@ class map_engine:
     def callback1(self, pointcloud_msg):
         self._kp = pointcloud_msg
         cv_image = self._cv_bridge.imgmsg_to_cv2(self._currentframe)
-        print(np.shape(cv_image))
+        print("keypoints size", np.shape(self._kp.points))
+        print("mappoints size", np.shape(self._mp.points))
         for i in self._kp.points:
+            '''
             a = int(i.x)
             b = int(i.y)
             c = int(i.z)
-            if cv_image[b,a] == 14:
+            '''
+            cate = cv_image[int(i.y),int(i.x)]
+            ii = self.sorting(self._mp.channels[0].values, int(i.z))
+            if ii!=-1:
+                self.smp.channels[0].values[ii] = cate * 100
+            '''
+            if cv_image[b,a] == 2:
                 index = self.sorting(self._mp.channels[0].values, c)
-                self.smp.points.append(self._mp.points[index])
+                self.smp.points.append(self._mp.points[index])'''
         self.smp.header = self._mp.header
         self._pub.publish(self.smp)
     
     def callback2(self, pointcloud_msg):
         self._mp = pointcloud_msg
+        self.smp.channels[0].values += [0]*(np.size(self._mp.channels[0].values)-np.size(self.smp.channels[0].values))
+        self.smp.points = self._mp.points
     
     def sorting(self, msg, value):
-        return msg.index(value)
+        if msg.index(value):
+            return msg.index(value)
+        else:
+            return -1
     
     def main(self):
         rospy.spin()
