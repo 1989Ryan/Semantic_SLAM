@@ -10,7 +10,7 @@ Now we can get visualized semantic map, where yellow represents buildings and co
 
 The whole ROS communication structure of the project is shown below.
 
-![structure](https://github.com/1989Ryan/Semantic_SLAM/blob/master/rosgraph.svg)
+![structure](https://github.com/1989Ryan/Semantic_SLAM/blob/master/graph.png?raw=true)
 
 ## Acknowledgement 
 
