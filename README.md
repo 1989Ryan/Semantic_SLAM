@@ -21,7 +21,8 @@ The implementation of [PSPNet by keras](https://github.com/Vladkryvoruchko/PSPNe
 ## Project Structure
 
 ```
-map_engine/
+src/
+    gng.py
     map_engine.py
 Third_Part/
     ORB_SLAM/
