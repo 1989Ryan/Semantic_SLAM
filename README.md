@@ -8,6 +8,10 @@ Now we can get visualized semantic map, where yellow represents buildings and co
 
 ![semantic SLAM](https://github.com/1989Ryan/Semantic_SLAM/blob/master/semantic_map.png?raw=true)
 
+The whole ROS communication structure of the project is shown below.
+
+![structure]()
+
 ## Acknowledgement 
 
 The state-of-the-art methodologies are achieved by team of [Raul Mur-Artal](https://github.com/raulmur) for [ORB_SLAM](https://github.com/raulmur/ORB_SLAM2) and team of [Hengshuang Zhao](https://github.com/hszhao) for [PSPNet](https://github.com/hszhao/PSPNet). Thanks for their great works.
