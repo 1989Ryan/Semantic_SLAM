@@ -12,6 +12,10 @@ The whole ROS communication structure of the project is shown below.
 
 ![structure](https://github.com/1989Ryan/Semantic_SLAM/blob/master/graph.png?raw=true)
 
+The Clustering result can be visualized here. Each cluster represent an ambiguous building location.
+
+![clustering](https://github.com/1989Ryan/README_pictures/blob/master/images/Figure_1.png?raw=true)
+
 ## Acknowledgement 
 
 The state-of-the-art methodologies are achieved by team of [Raul Mur-Artal](https://github.com/raulmur) for [ORB_SLAM](https://github.com/raulmur/ORB_SLAM2) and team of [Hengshuang Zhao](https://github.com/hszhao) for [PSPNet](https://github.com/hszhao/PSPNet). Thanks for their great works.
@@ -22,7 +26,7 @@ The implementation of [PSPNet by keras](https://github.com/Vladkryvoruchko/PSPNe
 
 ```
 src/
-    gng.py
+    DBSCAN.py
     map_engine.py
 Third_Part/
     ORB_SLAM/
@@ -45,9 +49,12 @@ chmod +x run.sh
 
 * ~~Publish the cloud point infomation~~
 * ~~Encode the cloud point and visual descriptor with semantic information~~
-* Clustering the cloud points into a single location point
+* ~~Clustering the cloud points into a single location point~~
 * ~~Visualize the result~~
 * ~~Run in the KITTI dataset~~
+* Use C++ for ROS node
+* Improve the accuracy of Image Segmentation
+* Benchmark in groundtruth
 * Run in XJTU campus
 * Connect all the elements into a single project
 * Inference accelerate
