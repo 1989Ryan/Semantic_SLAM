@@ -14,7 +14,8 @@ The whole ROS communication structure of the project is shown below.
 
 The Clustering result can be visualized here. Each cluster represent an ambiguous building location.
 
-![clustering](https://github.com/1989Ryan/README_pictures/blob/master/images/Figure_1.png?raw=true)
+<center>   <img src= "https://github.com/1989Ryan/README_pictures/blob/master/images/Figure_1.png?raw=true" width = "75%" height = "75%"> </center>
+
 
 ## Acknowledgement 
 
