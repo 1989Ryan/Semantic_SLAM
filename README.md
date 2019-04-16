@@ -53,7 +53,7 @@ chmod +x run.sh
 * ~~Clustering the cloud points into a single location point~~
 * ~~Visualize the result~~
 * ~~Run in the KITTI dataset~~
-* Use C++ for ROS node
+* ~~Use C++ for ROS node~~
 * Improve the accuracy of Image Segmentation
 * Benchmark in groundtruth
 * Run in XJTU campus
