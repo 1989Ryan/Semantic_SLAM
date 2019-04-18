@@ -23,6 +23,24 @@ The state-of-the-art methodologies are achieved by team of [Raul Mur-Artal](http
 
 The implementation of [PSPNet by keras](https://github.com/Vladkryvoruchko/PSPNet-Keras-tensorflow) is presented by [VladKry](https://github.com/Vladkryvoruchko). Thanks for their team's work.
 
+## Prerequisite
+
+First you have to install ROS Kinetic. To visualize the result you also have to install rviz.
+
+To run the PSPNet in ROS, you have to install the following packages.
+
+* python 2.7
+* Tensorflow >= 0.4.0
+* Keras 2.2.2
+
+To run the ORB_SLAM2 in ROS, you have to install the following packages.
+
+* C++11 or C++0x Compiler
+* Pangolin
+* OpenCVRequired at leat 2.4.3. Tested with OpenCV 2.4.11 and OpenCV 3.2.
+* Eigen3 Required at least 3.1.0.
+* DBoW2 and g2o (Included in Thirdparty folder)
+
 ## Project Structure
 
 ```
