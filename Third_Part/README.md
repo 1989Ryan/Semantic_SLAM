@@ -11,7 +11,7 @@ To run the PSPNet in ROS, you have to install the following packages.
 * Tensorflow >= 0.4.0
 * Keras 2.2.2
 
-You have to use the weight files for PSPNet, which can be download [here](https://pan.baidu.com/s/1hg1MF5Tysae-s1Hcv0F-lA). Key: j6cm.
+You have to use the weight files for PSPNet, which can be downloaded [here](https://pan.baidu.com/s/1hg1MF5Tysae-s1Hcv0F-lA). Key: j6cm.
 
 After you download the weight file, you have to put it at the folder ``PSPNet_Keras_tensorflow/weights/npy/`` to make sure that it could be used currectly. Make sure that the default version of python is python 2.7.
 
