@@ -11,6 +11,10 @@ To run the PSPNet in ROS, you have to install the following packages.
 * Tensorflow >= 0.4.0
 * Keras 2.2.2
 
+You have to use the weight files for PSPNet, which can be download [here](https://pan.baidu.com/s/1hg1MF5Tysae-s1Hcv0F-lA). Key: j6cm.
+
+After you download the weight file, you have to put it at the folder ``PSPNet_Keras_tensorflow/weights/npy/`` to make sure that it could be used currectly. Make sure that the default version of python is python 2.7.
+
 To run the ORB_SLAM2 in ROS, you have to install the following packages.
 
 * C++11 or C++0x Compiler
@@ -19,6 +23,8 @@ To run the ORB_SLAM2 in ROS, you have to install the following packages.
 * Eigen3 Required at least 3.1.0.
 * DBoW2 and g2o (Included in Thirdparty folder)
 * ROS Kinetic
+
+Please run the file ``build.sh`` and ``build_ros.sh`` to compile the files. Then you have to add ``export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:{Your own path}/Semantic_SLAM/Third_Part/ORB_SLAM2/Examples/ROS`` to ``.bashrc``.
 
 ## Semantic Image Publisher
 
@@ -29,6 +35,4 @@ Run ``python Semantic_Information_Publisher.py image:={the image topic you provi
 Run ``ros_mono.cc`` to publish the cloud point.
 
 You can visualize the result with Rviz.
-
-![](https://github.com/1989Ryan/Semantic_SLAM/blob/master/Third_Part/Screenshot%20from%202019-03-29%2013-20-20.png?raw=true)
 
