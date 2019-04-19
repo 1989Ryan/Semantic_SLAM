@@ -67,7 +67,7 @@ run.sh
 
 ## RUN
 
-First you have to complile the ``/catkin_ws`` using ``catkin_make`` to ensure the message can be used. 
+First you have to compile the ``/catkin_ws`` using ``catkin_make`` to ensure the message can be used. 
 
 Then you have to read the README files in the ``/ThirdPart/ORB_SLAM`` and ``/ThirdPart/PSPNet_Keras_tensorflow`` and follow their command to ensure the ORB SLAM and PSPNet can work correctly.
 
