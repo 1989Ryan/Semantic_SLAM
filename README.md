@@ -16,10 +16,6 @@ The whole ROS communication structure of the project is shown below.
 
 ![structure](graph.png)
 
-The Clustering result can be visualized here. Each cluster represent an ambiguous building location.
-
-<center>   <img src= "https://github.com/1989Ryan/README_pictures/blob/master/images/Figure_1.png?raw=true" width = "75%" height = "75%"> </center>
-
 
 ## Acknowledgement 
 
@@ -52,15 +48,21 @@ To run the ORB_SLAM2 in ROS, you have to install the following packages.
 ## Project Structure
 
 ```
+catkin_ws/
+    src/
+        map_generator/
+        CMakeList.txt
 src/
-    DBSCAN.py
+    cluster.py
     map_engine.py
 Third_Part/
     ORB_SLAM/
     PSPNet_Keras_tensorflow/
 test/
+result/
 .gitignore
 README.md
+run.sh
 ```
 
 ## RUN
