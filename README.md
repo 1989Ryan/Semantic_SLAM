@@ -4,7 +4,7 @@
 
 This on-going project is Semantic SLAM using ROS, ORB SLAM and PSPNet101. Will be used in Robotics for semantic understanding and navigation.
 
-Now the visualized semantic map is achieved, where yellow represents buildings and constructions, green represents vegetation, blue represents vehicles, and red represents roads and sidewalks. 
+Now the visualized semantic map is achieved, where yellow represents buildings and constructions, green represents vegetation, blue represents vehicles, and red represents roads and sidewalks. You can also visualize the trajectory using Rviz. 
 
 ![semantic SLAM](https://github.com/1989Ryan/Semantic_SLAM/blob/master/semantic_map.png?raw=true)
 
