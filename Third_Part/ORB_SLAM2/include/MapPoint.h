@@ -121,6 +121,10 @@ protected:
      // Position in absolute coordinates
      cv::Mat mWorldPos;
 
+     //TODO
+     //Enlabel the mappoint
+     //int label;
+
      // Keyframes observing the point and associated index in keyframe
      std::map<KeyFrame*,size_t> mObservations;
 

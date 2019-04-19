@@ -18,13 +18,20 @@
 * along with ORB-SLAM2. If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*TODO: Trajectory topic and message*/
+
 
 #include<iostream>
 #include<algorithm>
 #include<fstream>
 #include<chrono>
-#include <sensor_msgs/PointCloud.h>
-#include <geometry_msgs/Point.h>
+#include<sensor_msgs/PointCloud.h>
+#include<geometry_msgs/Point.h>
+#include<map_generator/mp.h>
+#include<map_generator/frame.h>
+#include <geometry_msgs/Pose.h>
+#include <map_generator/tjy.h>
+#include <nav_msgs/Path.h>
 
 
 #include<mutex>
@@ -49,12 +56,13 @@ class ImageGrabber
 public:
     ImageGrabber(ORB_SLAM2::System* pSLAM):mpSLAM(pSLAM){}
 
-    void GrabImage(const sensor_msgs::ImageConstPtr& msg);
+    void GrabImage(const map_generator::frame::ConstPtr& frame);
     void pubandsub()
     {
-        pub_ = n_.advertise<sensor_msgs::PointCloud>("/mappoint", 1000);
-        pub_2 = n_.advertise<sensor_msgs::PointCloud>("/KeyPoint",1);
-        sub_ = n_.subscribe("/camera/image_raw", 1, &ImageGrabber::GrabImage, this);
+        pub_ = n_.advertise<map_generator::mp>("/map", 1000);
+        pub2 = n_.advertise<nav_msgs::Path>("/trajectory", 1000);
+        sub_ = n_.subscribe("/result", 1, &ImageGrabber::GrabImage, this);
+
     }
 
     ORB_SLAM2::System* mpSLAM;
@@ -62,10 +70,14 @@ public:
 private:
     ros::NodeHandle n_;
     ros::Publisher pub_;
-    ros::Publisher pub_2;
+    ros::Publisher pub2;
     ros::Subscriber sub_;
     sensor_msgs::PointCloud mpt;
     sensor_msgs::PointCloud kpt;
+    map_generator::mp map;
+    map_generator::tjy tj;
+    nav_msgs::Path path;
+    sensor_msgs::Image cm;
     int count;
 };
 
@@ -86,7 +98,7 @@ int main(int argc, char **argv)
     ImageGrabber igb(&SLAM);
     igb.pubandsub();
     ros::MultiThreadedSpinner s(2);
-    ros::spin();
+    s.spin();
     // Stop all threads
     SLAM.Shutdown();
     // Save camera trajectory
@@ -99,13 +111,18 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void ImageGrabber::GrabImage(const sensor_msgs::ImageConstPtr& msg)
+bool SortByZ(const cv::Mat &mp1, const cv::Mat &mp2)//注意：本函数的参数的类型一定要与vector中元素的类型一致  
+{   
+    return mp1.at<float>(3) < mp2.at<float>(3);  //升序排列
+}
+
+void ImageGrabber::GrabImage(const map_generator::frame::ConstPtr& frame)
 {
     // Copy the ros image message to cv::Mat.
     cv_bridge::CvImageConstPtr cv_ptr;
     try
     {
-        cv_ptr = cv_bridge::toCvShare(msg);
+        cv_ptr = cv_bridge::toCvShare(frame->image, frame);
     }
     catch (cv_bridge::Exception& e)
     {
@@ -118,8 +135,11 @@ void ImageGrabber::GrabImage(const sensor_msgs::ImageConstPtr& msg)
     {
         vector<cv::Mat> mppos = mpSLAM->GetTrackedMapPointsPose();
         vector<cv::Point3f> key = mpSLAM -> GetGoodKeyPoints();
+        vector<cv::Mat> tjry = mpSLAM->GetPose();
         int i = 0;
         int num_points = mppos.size();
+        path.header.stamp=ros::Time::now();
+        path.header.frame_id="sensor_frame";
         mpt.header.stamp = ros::Time::now();
         mpt.header.frame_id = "sensor_frame";
         mpt.points.resize(num_points);
@@ -127,6 +147,22 @@ void ImageGrabber::GrabImage(const sensor_msgs::ImageConstPtr& msg)
         mpt.channels.resize(1);
         mpt.channels[0].name = "rgb";
         mpt.channels[0].values.resize(num_points);
+        sort(mppos.begin(), mppos.end(), SortByZ);
+        geometry_msgs::PoseStamped this_pose_stamped;
+        for(auto t:tjry)
+        {
+            this_pose_stamped.pose.position.x = t.at<float>(0);
+            this_pose_stamped.pose.position.y = t.at<float>(1);
+            this_pose_stamped.pose.position.z = t.at<float>(2);
+            this_pose_stamped.pose.orientation.x = t.at<float>(3);
+            this_pose_stamped.pose.orientation.y = t.at<float>(4);
+            this_pose_stamped.pose.orientation.z = t.at<float>(5);
+            this_pose_stamped.pose.orientation.w = t.at<float>(6);
+
+            this_pose_stamped.header.stamp=path.header.stamp;
+            this_pose_stamped.header.frame_id="sensor_frame";
+            path.poses.push_back(this_pose_stamped);
+        }
         for(auto mp: mppos)
         {
             mpt.points[i].x = mp.at<float>(0);
@@ -137,7 +173,7 @@ void ImageGrabber::GrabImage(const sensor_msgs::ImageConstPtr& msg)
         }
         i = 0;
         kpt.points.resize(key.size());
-        kpt.header.stamp = ros::Time::now();
+        kpt.header.stamp = mpt.header.stamp;
         kpt.header.frame_id = "keypoint_frame";
         //we'll also add an intensity channel to the cloud
         kpt.channels.resize(1);
@@ -152,7 +188,11 @@ void ImageGrabber::GrabImage(const sensor_msgs::ImageConstPtr& msg)
             i ++;
         }
         i = 0;
-        pub_.publish(mpt);
-        pub_2.publish(kpt);
+        map.mpt = mpt;
+        map.kpt = kpt;
+        map.currentframe = frame->category;
+        pub_.publish(map);
+        pub2.publish(path);
     }
 }
+

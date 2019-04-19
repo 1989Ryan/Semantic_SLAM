@@ -558,6 +558,47 @@ void System::SaveKeyFrameTrajectoryTUM(const string &filename)
     cout << endl << "trajectory saved!" << endl;
 }
 
+vector<cv::Mat> System::GetPose()
+{
+    vector<KeyFrame*> vpKFs = mpMap->GetAllKeyFrames();
+    sort(vpKFs.begin(),vpKFs.end(),KeyFrame::lId);
+    vector<cv::Mat> T;
+    cv::Mat p = cv::Mat::zeros(7,1,CV_32F);
+
+    // Transform all keyframes so that the first keyframe is at the origin.
+    // After a loop closure the first keyframe might not be at the origin.
+    //cv::Mat Two = vpKFs[0]->GetPoseInverse();
+
+    //ofstream f;
+    //f.open(filename.c_str());
+    //f << fixed;
+
+    for(size_t i=0; i<vpKFs.size(); i++)
+    {
+        KeyFrame* pKF = vpKFs[i];
+
+       // pKF->SetPose(pKF->GetPose()*Two);
+
+        if(pKF->isBad())
+            continue;
+
+        cv::Mat R = pKF->GetRotation().t();
+        vector<float> q = Converter::toQuaternion(R);
+        cv::Mat t = pKF->GetCameraCenter();
+        for(int k = 0; k < 3; k++){
+            float* P = p.ptr<float>(k);
+            P[0] = t.at<float>(k);
+        }
+        for(int k = 3;k < 7;k++){
+            float* P = p.ptr<float>(k);
+            P[0] = q[k-3];
+        }
+        T.push_back(p);
+
+    }
+    return T;
+}
+
 void System::SaveTrajectoryKITTI(const string &filename)
 {
     cout << endl << "Saving camera trajectory to " << filename << " ..." << endl;
@@ -612,6 +653,7 @@ void System::SaveTrajectoryKITTI(const string &filename)
     f.close();
     cout << endl << "trajectory saved!" << endl;
 }
+
 
 void System::SaveMap(const string &filename)  
 {  

@@ -205,8 +205,11 @@ if __name__ == "__main__":
             cimg = misc.imresize(img, (args.input_size, args.input_size))
 
             probs = pspnet.predict(img, args.flip)
+            print(np.shape(probs))
 
             cm = np.argmax(probs, axis=2)
+            print(np.shape(cm))
+            print(cm)
             pm = np.max(probs, axis=2)
 
             color_cm = utils.add_color(cm)

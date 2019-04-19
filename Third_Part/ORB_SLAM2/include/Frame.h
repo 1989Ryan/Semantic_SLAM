@@ -108,7 +108,8 @@ public:
 
     void ClearGoodDescriptor();//For debug use.
     void SaveGoodDescriptor(const float &x, const float  &y, const float  &r);//For debug use.
-
+    vector<cv::Point3f> SendGoodKeyPointinfo();
+    
 public:
     // Vocabulary used for relocalization.
     ORBVocabulary* mpORBvocabulary;
@@ -159,6 +160,9 @@ public:
 
     // ORB descriptor, each row associated to a keypoint.
     cv::Mat mDescriptors, mDescriptorsRight;
+
+    //good keypoint in this frame, ready to send to ros system
+    vector<cv::Point3f> GoodKeyPointinfo;
 
     // MapPoints associated to keypoints, NULL pointer if no association.
     std::vector<MapPoint*> mvpMapPoints;

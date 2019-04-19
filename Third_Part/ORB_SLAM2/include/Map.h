@@ -28,7 +28,7 @@
 #include "InitKeyFrame.h"
 #include "KeyFrameDatabase.h" //When loading the map, we need to add KeyFrame to KeyFrameDatabase.
 #include <set>
-#include "Frame.h" // Used for initializing frame.nNextId and mnId
+#include "Frame.h" // Used for initializing frame. and mnId
 
 #include <mutex>
 

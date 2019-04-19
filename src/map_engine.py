@@ -1,3 +1,11 @@
+# coding: utf-8
+'''
+This file is part of Semantic SLAM
+License: MIT
+Author: Zirui Zhao
+Email: ryan_zzr@outlook.com
+Web: https://1989Ryan.github.io/
+'''
 import rospy
 import numpy as np
 import os
@@ -7,64 +15,75 @@ from cv_bridge import CvBridge
 from std_msgs.msg import String
 from sensor_msgs.msg import Image
 from sensor_msgs.msg import PointCloud, ChannelFloat32
+from map_generator.msg import mp
 sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
 
 '''
 Real time semantic map generator engine, including publisher and subscriper port for ros.
-Haven't tested yet.
 '''
+
 class map_engine:
     def __init__(self):
         self._cv_bridge = CvBridge()
-        self._sub = rospy.Subscriber('categorymap', Image, self.callback, queue_size = 1000)
-        self._sub1 = rospy.Subscriber('KeyPoints', PointCloud, self.callback1, queue_size = 1000)
-        self._sub2 = rospy.Subscriber('MapPoints', PointCloud, self.callback2, queue_size = 1000)
+        self._sub = rospy.Subscriber('/map', mp, self.callback, queue_size = 1000)
         self._pub = rospy.Publisher('Semantic_Map', PointCloud, queue_size=1)
         self._currentframe = Image()
-        self._mp = PointCloud()
+        self._framequeue = []
         self._kp = PointCloud()
         self.smp = PointCloud()
-        self.smp.channels = [ChannelFloat32()]
+        self._mpqueue = []
+        self._kpqueue = []
+        self.smp.channels = [ChannelFloat32(),ChannelFloat32()]
         self.smp.channels[0].name = 'rgb8'
-
-    def callback(self, image_msg):
-        self._currentframe = image_msg
-
-    def callback1(self, pointcloud_msg):
-        self._kp = pointcloud_msg
-        cv_image = self._cv_bridge.imgmsg_to_cv2(self._currentframe)
-        print("keypoints size", np.shape(self._kp.points))
-        print("mappoints size", np.shape(self._mp.points))
-        for i in self._kp.points:
-            '''
-            a = int(i.x)
-            b = int(i.y)
-            c = int(i.z)
-            '''
-            cate = cv_image[int(i.y),int(i.x)]
-            ii = self.sorting(self._mp.channels[0].values, int(i.z))
-            if ii!=-1:
-                self.smp.channels[0].values[ii] = cate * 100
-            '''
-            if cv_image[b,a] == 2:
-                index = self.sorting(self._mp.channels[0].values, c)
-                self.smp.points.append(self._mp.points[index])'''
-        self.smp.header = self._mp.header
-        self._pub.publish(self.smp)
+        self.temp = 0
     
-    def callback2(self, pointcloud_msg):
-        self._mp = pointcloud_msg
+    def process(self, queue, ele):
+        if np.size(queue)>60:
+            queue.remove(queue[0])
+        queue.append(ele)
+        return queue
+
+    def callback(self, pointcloud_msg):
+        self._kp = pointcloud_msg.kpt
+        self._mp = pointcloud_msg.mpt
+        self._currentframe = pointcloud_msg.currentframe
+        self._kpqueue = self.process(self._kpqueue, self._kp)
+        self._framequeue = self.process(self._framequeue, self._currentframe)
+        if np.size(self._framequeue)<=30:
+            return
         self.smp.channels[0].values += [0]*(np.size(self._mp.channels[0].values)-np.size(self.smp.channels[0].values))
         self.smp.points = self._mp.points
+        self.smp.channels[1] = self._mp.channels[0]
+        cv_image = self._cv_bridge.imgmsg_to_cv2(self._framequeue[-29])
+        for i in self._kpqueue[-29].points:
+            cate = cv_image[int(i.y),int(i.x)]
+            if i.z in  self._mp.channels[0].values:
+                ii = self._mp.channels[0].values.index(i.z)
+                self.smp.channels[0].values[ii] = cate * 100
+        cv_image = self._cv_bridge.imgmsg_to_cv2(self._framequeue[1])
+        for i in self._kpqueue[1].points:
+            cate = cv_image[int(i.y),int(i.x)]
+            if i.z in  self._mp.channels[0].values:
+                ii = self._mp.channels[0].values.index(i.z)
+                self.smp.channels[0].values[ii] = cate * 100
+        self.smp.header = self._mp.header
+        self._pub.publish(self.smp)
+        rospy.loginfo("semantic map published")
+        
     
     def sorting(self, msg, value):
-        if msg.index(value):
-            return msg.index(value)
-        else:
-            return -1
+        return (msg.index(value))
     
     def main(self):
         rospy.spin()
+        def myhook():
+            f = open("semantic_map.txt", "w")
+            for i in range(np.size(self.smp.points)):
+                f.write("%f " %self.smp.points[i].x+"%f " %self.smp.points[i].y+"%f " %self.smp.points[i].z+" %d" %self.smp.channels[0].values[i]+"\n")
+            f.close()
+        rospy.on_shutdown(myhook)
+        
+        
     
 if __name__ == '__main__':
     rospy.init_node('map_engine')

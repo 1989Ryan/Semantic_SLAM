@@ -8,9 +8,13 @@ Now the visualized semantic map is achieved, where yellow represents buildings a
 
 ![semantic SLAM](https://github.com/1989Ryan/Semantic_SLAM/blob/master/semantic_map.png?raw=true)
 
+You can also get the semantic topological map which contains the ambiguous building location and trajectory.
+
+![semantic topological map](https://github.com/1989Ryan/Semantic_SLAM/blob/master/Topological_Semantic_Map.png?raw=true)
+
 The whole ROS communication structure of the project is shown below.
 
-![structure](https://github.com/1989Ryan/Semantic_SLAM/blob/master/graph.png?raw=true)
+![structure](https://github.com/1989Ryan/Semantic_SLAM/rosgraph.svg)
 
 The Clustering result can be visualized here. Each cluster represent an ambiguous building location.
 

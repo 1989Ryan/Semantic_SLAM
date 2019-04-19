@@ -23,13 +23,15 @@ public:
 
     void pubandsub()
     {
-        sub_ = n_.subscribe("/cm", 1, &Map_Generator::callback, this);
-        sub2_ = new message_filters::Subscriber<sensor_msgs::PointCloud>(n_, "/mappoint", 1);
-        sub3_ = new message_filters::Subscriber<sensor_msgs::PointCloud>(n_, "/KeyPoint", 1);
-        sync_ = new message_filters::Synchronizer<slamsyncpolicy>(slamsyncpolicy(1), *sub2_, *sub3_);
+        sub_ = n_.subscribe("/cm", 1000, &Map_Generator::callback, this);
+        sub2_ = new message_filters::Subscriber<sensor_msgs::PointCloud>(n_, "/mappoint", 1000);
+        sub3_ = new message_filters::Subscriber<sensor_msgs::PointCloud>(n_, "/KeyPoint", 1000);
+        sync_ = new message_filters::Synchronizer<slamsyncpolicy>(slamsyncpolicy(100), *sub2_, *sub3_);
         sync_ -> registerCallback(boost::bind(&Map_Generator::callback2, this, _1, _2));
         pub_ = n_.advertise<sensor_msgs::PointCloud>("/smp", 1);
         ROS_INFO("node inited");
+        smp.channels.resize(1);
+        smp.channels[0].name = "category";
     }
     void callback(const sensor_msgs::ImageConstPtr& img)
     {
@@ -38,13 +40,12 @@ public:
 
     void callback2( const sensor_msgs::PointCloudConstPtr& mpt, const sensor_msgs::PointCloudConstPtr& kpt)
     {
-        sensor_msgs::PointCloud smp;
+        
         int num_points = mpt->channels[0].values.size();
         int num_keys = kpt->channels[0].values.size();
         smp.points.resize(num_points);
+        smp.points = mpt->points;
         //we'll also add an intensity channel to the cloud
-        smp.channels.resize(1);
-        smp.channels[0].name = "category";
         smp.channels[0].values.resize(num_points);
         cv_bridge::CvImageConstPtr cv_ptr;
         try
@@ -62,23 +63,14 @@ public:
         for(int k = 0; k< num_keys; k++)
         {
             geometry_msgs::Point32 kp = kpt->points[k];
-            ROS_INFO("find kp");
-            int category;
-            if(kp.y<1241 && kp.x<376) category = cv_ptr->image.ptr<uchar>(int(kp.y))[int(kp.x)];
-            else category = 0;
-            ROS_INFO("find category");
-            int i;
-            vector <float>::iterator iElement = find(id.begin(), id.end(), int(kp.z));
-            ROS_INFO("find index");
+            int category = cv_ptr->image.ptr<uchar>(int(kp.y))[int(kp.x)];
+            vector <float>::iterator iElement = find(id.begin(), id.end(), float(kp.z));
             if( iElement != id.end() )
             {
-                i = distance(id.begin(),iElement);
-                ROS_INFO("encoding");
+                int i = distance(id.begin(),iElement);
                 smp.channels[0].values[i] = category * 100;
-                ROS_INFO("encoded");
             }
         }
-        ROS_INFO("semantic map publishing");
         smp.header.stamp = mpt->header.stamp;
         smp.header.frame_id = mpt->header.frame_id;
         pub_.publish(smp);

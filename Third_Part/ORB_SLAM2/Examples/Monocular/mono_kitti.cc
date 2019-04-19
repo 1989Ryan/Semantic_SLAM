@@ -131,6 +131,7 @@ int main(int argc, char **argv)
     cin >> IsSaveMap;  
     if(IsSaveMap == 'Y' || IsSaveMap == 'y')  
         SLAM.SaveMap("MapPointandKeyFrame.bin");
+	SLAM.SavePoint("MapPoint.txt");
 
     return 0;
 }
