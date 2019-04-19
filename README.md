@@ -86,9 +86,8 @@ chmod +x run.sh
 * ~~Visualize the result~~
 * ~~Run in the KITTI dataset~~
 * ~~Use C++ for ROS node~~
-* Run in simulate environment
-* Improve the accuracy of Image Segmentation
+* Run in simulation environment
 * Benchmark in groundtruth
 * Run in XJTU campus
-* Connect all the elements into a single project
+* ~~Connect all the elements into a single project~~
 * Inference accelerate
