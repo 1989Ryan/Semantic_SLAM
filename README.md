@@ -25,11 +25,15 @@ The implementation of [PSPNet by keras](https://github.com/Vladkryvoruchko/PSPNe
 
 ## Prerequisite
 
-First you have to install ROS Kinetic. To visualize the result you also have to install rviz.
+Basic prerequisite.
+
+* ROS kinetic
+* Python 2.7
+* scipy
+* sklearn
 
 To run the PSPNet in ROS, you have to install the following packages.
 
-* python 2.7
 * Tensorflow >= 0.4.0
 * Keras 2.2.2
 
