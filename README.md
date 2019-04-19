@@ -14,7 +14,7 @@ You can also get the semantic topological map which contains the ambiguous build
 
 The whole ROS communication structure of the project is shown below.
 
-![structure](https://github.com/1989Ryan/Semantic_SLAM/rosgraph.svg)
+![structure](https://github.com/1989Ryan/Semantic_SLAM/rosgraph.svg?raw=true)
 
 The Clustering result can be visualized here. Each cluster represent an ambiguous building location.
 
