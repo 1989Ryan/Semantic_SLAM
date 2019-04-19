@@ -67,7 +67,11 @@ run.sh
 
 ## RUN
 
-You can run the script ``run.sh`` to use the system. You have to provide the rostopic ``/camera/image_raw``
+First you have to complile the ``/catkin_ws`` using ``catkin_make`` to ensure the message can be used. 
+
+Then you have to read the README files in the ``/ThirdPart/ORB_SLAM`` and ``/ThirdPart/PSPNet_Keras_tensorflow`` and follow their command to ensure the ORB SLAM and PSPNet can work correctly.
+
+You can then run the script ``run.sh`` to use the system. You have to provide the rostopic ``/camera/image_raw``
 ```
 cd Semantic_SLAM/
 chmod +x run.sh
