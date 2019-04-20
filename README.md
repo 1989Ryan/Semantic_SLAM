@@ -2,13 +2,13 @@
 
 ![license](https://img.shields.io/bower/l/bootstrap.svg?color=blue) <a href="https://996.icu"><img src="https://img.shields.io/badge/link-996.icu-red.svg" alt="996.icu" /></a>
 
-This on-going project is Semantic SLAM using ROS, ORB SLAM and PSPNet101. Will be used in Robotics for semantic understanding and navigation.
+This on-going project is Semantic SLAM using ROS, ORB SLAM and PSPNet101. It will be used in autonomous robotics for semantic understanding and navigation.
 
-Now the visualized semantic map is achieved, where yellow represents buildings and constructions, green represents vegetation, blue represents vehicles, and red represents roads and sidewalks. You can also visualize the trajectory using Rviz. 
+Now the visualized semantic map with topological information is reachable, where yellow represents buildings and constructions, green represents vegetation, blue represents vehicles, and red represents roads and sidewalks. The cube is ambiguous building location and green line is the trajectory. You can visualize these information using Rviz. 
 
 ![semantic SLAM](semantic_map.png)
 
-You can also get the semantic topological map which contains the ambiguous building location and trajectory.
+You can also get the semantic topological map which only contains the ambiguous building location and trajectory.
 
 ![semantic topological map](Topological_Semantic_Map.png)
 
