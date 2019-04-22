@@ -86,6 +86,7 @@ chmod +x run.sh
 * ~~Visualize the result~~
 * ~~Run in the KITTI dataset~~
 * ~~Use C++ for ROS node~~
+* Add RGB channel
 * Run in simulation environment
 * Benchmark in groundtruth
 * Run in XJTU campus
