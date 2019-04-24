@@ -34,7 +34,7 @@ Basic prerequisite.
 
 To run the PSPNet in ROS, you have to install the following packages.
 
-* Tensorflow >= 0.4.0
+* Tensorflow-gpu >= 0.4.0 (0.4.0 is highly recommended)
 * Keras 2.2.2
 
 To run the ORB_SLAM2 in ROS, you have to install the following packages.
