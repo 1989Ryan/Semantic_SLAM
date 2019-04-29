@@ -24,7 +24,13 @@ Real time image segmentation, using PSPNet101. Dummy publisher which is Really R
 '''
 
 class Semantic_Imformation_Publisher():
+    '''
+    To publish the semantic infomation which contains the categories of each pixel.
+    '''
     def __init__(self):
+        '''
+        node initialization
+        '''
         self._cv_bridge = CvBridge()
         #self._session = tf.Session()
         self.pspnet = PSPNet101(nb_classes=19, input_shape=(713, 713),
@@ -36,6 +42,7 @@ class Semantic_Imformation_Publisher():
         self._pub = rospy.Publisher('/result', frame, queue_size = 1)
     
     def callback(self, image_msg):
+        '''call back funcion, which will send the image and category of each pixel'''
         cv_image = self._cv_bridge.imgmsg_to_cv2(image_msg, "rgb8")
         h_ori, w_ori = cv_image.shape[:2]
         with self.graph.as_default():
@@ -45,16 +52,17 @@ class Semantic_Imformation_Publisher():
             probs = ndimage.zoom(probs, (1. * h_ori / h, 1. * w_ori / w, 1.),
                                     order=1, prefilter=False)
         rospy.loginfo("running")
-        cm = np.argmax(probs, axis=2).astype(np.int32)
-        print(cm)
-        category = self._cv_bridge.cv2_to_imgmsg(cm)
+        #cm = np.argmax(probs, axis=2).astype(np.int32)
+        #print(probs)
+        #category = self._cv_bridge.cv2_to_imgmsg(cm)
+        probs = self._cv_bridge.cv2_to_imgmsg(probs)
         f = frame()
         f.image = image_msg
-        f.category = category
+        f.category = probs
         self._pub.publish(f)
 
     def img_proc(self, img):
-        # Preprocess
+        # Preprocess the image
         img = misc.imresize(img, (713,713))
         img = img - DATA_MEAN
         img = img[:, :, ::-1]  # RGB => BGR
