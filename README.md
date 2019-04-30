@@ -79,6 +79,7 @@ chmod +x run.sh
 * ~~Clustering the cloud points into a single location point~~
 * ~~Visualize the result~~
 * ~~Run in the KITTI dataset~~
+* Run in the TUM dataset
 * ~~Use C++ for ROS node~~
 * Add localization mode
 * Add GPS fusion
