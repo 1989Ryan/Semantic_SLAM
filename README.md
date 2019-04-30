@@ -80,7 +80,8 @@ chmod +x run.sh
 * ~~Visualize the result~~
 * ~~Run in the KITTI dataset~~
 * ~~Use C++ for ROS node~~
-* Add RGB channel
+* Add localization mode
+* Add GPS fusion
 * Run in simulation environment
 * Benchmark in groundtruth
 * Run in XJTU campus
