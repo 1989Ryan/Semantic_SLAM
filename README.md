@@ -80,7 +80,7 @@ chmod +x run.sh
 * ~~Visualize the result~~
 * ~~Run in the KITTI dataset~~
 * Run in the TUM dataset
-* ~~Use C++ for ROS node~~
+* Use C++ for ROS node
 * Add localization mode
 * Add GPS fusion
 * Run in simulation environment
