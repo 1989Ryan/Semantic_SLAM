@@ -52,13 +52,14 @@ class Semantic_Imformation_Publisher():
             probs = ndimage.zoom(probs, (1. * h_ori / h, 1. * w_ori / w, 1.),
                                     order=1, prefilter=False)
         rospy.loginfo("running")
-        #cm = np.argmax(probs, axis=2).astype(np.int32)
+        cm = np.argmax(probs, axis=2).astype(np.uint8)
         #print(probs)
-        #category = self._cv_bridge.cv2_to_imgmsg(cm)
+        #print(cm)
+        category = self._cv_bridge.cv2_to_imgmsg(cm)
         probs = self._cv_bridge.cv2_to_imgmsg(probs)
         f = frame()
         f.image = image_msg
-        f.category = probs
+        f.category = category
         self._pub.publish(f)
 
     def img_proc(self, img):
