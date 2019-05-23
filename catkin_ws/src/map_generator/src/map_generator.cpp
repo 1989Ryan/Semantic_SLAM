@@ -47,19 +47,19 @@ public:
         int num_points = msg->mpt.channels[0].values.size();
         int num_keys = msg->kpt.channels[0].values.size();
         //queueing the messages
-        if(kpqueue.size()>30)
+        if(kpqueue.size()>40)
             kpqueue.pop();
         kpqueue.push(msg->kpt);
-        if(mpqueue.size()>30)
+        if(mpqueue.size()>40)
             mpqueue.pop();
         mpqueue.push(msg->mpt);
-        if(framequeue.size()>30)
+        if(framequeue.size()>40)
             framequeue.pop();
         framequeue.push(msg->currentframe);
         //cout<<"good2"<<endl;
         //queueing(msg->mpt, mpqueue);
         //queueing(msg->currentframe, framequeue);
-        if(framequeue.size()<=30)
+        if(framequeue.size()<=40)
             return ;
         cv_bridge::CvImageConstPtr cv_ptr;
         //cout<<"good"<<endl;
@@ -93,7 +93,7 @@ public:
         vector <float> id;
         id.resize(num_points);
         //cout<<"good8"<<endl;
-        mpt = mpqueue.front();
+        mpt =  msg->mpt;
         kpt = kpqueue.front();
         id = mpt.channels[0].values;
         //cout<<"good9"<<endl;
@@ -101,11 +101,11 @@ public:
         for(int k = 0; k< num_keys0; k++)
         {
             geometry_msgs::Point32 kp = kpt.points[k];
-            cout<<kp.y<<" "<<kp.x<<" "<<kp.z<<endl;
-            cv::Point temp;
-            temp.x = kp.x;temp.y = kp.y;
-            int category = cv_ptr->image.at<uchar>(temp);
-            vector <float>::iterator iElement = find(id.begin(), id.end(), float(kp.z));
+            cv::Mat img = cv_ptr->image;
+            //int category = int(cv_ptr->image.at<uchar>(int(kp.y), int(kp.x)));
+            int category = (int)(*(img.data+img.step[0]*int(kp.y)+img.step[1]*int(kp.x)));
+            cout<<category<<endl;
+            vector <float>::iterator iElement = find(id.begin(), id.end(), kp.z);
             if( iElement != id.end() )
             {
                 int i = distance(id.begin(),iElement);
