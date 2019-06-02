@@ -16,6 +16,11 @@ The whole ROS communication structure of the project is shown below.
 
 ![structure](graph.png)
 
+## New Update!
+
+The system has been updated to the latese version. I have merged the semantic fusion mode with the SLAM system to achieve real time fusion and better loop closing performance. The map saving, map loading and localization mode has been completed. To run the new version of the system, please run the shell script "run_C.sh". You are welcome for issueing.
+
+I have saved the old version of system in branch "version0.0.1".
 
 ## Prerequisite
 
@@ -69,7 +74,7 @@ You can then run the script ``run.sh`` to use the system. You have to provide th
 ```
 cd Semantic_SLAM/
 chmod +x run.sh
-./run.sh
+./run_C.sh
 ```
 
 ## TODO
@@ -81,7 +86,7 @@ chmod +x run.sh
 * ~~Run in the KITTI dataset~~
 * Run in the TUM dataset
 * ~~Use C++ for ROS node~~
-* Add localization mode
+* ~~Add localization mode~~
 * Add GPS fusion
 * Run in simulation environment
 * Benchmark in groundtruth
