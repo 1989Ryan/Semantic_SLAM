@@ -18,7 +18,7 @@ The whole ROS communication structure of the project is shown below.
 
 ## New Update!
 
-The system has been updated to the latest version. I have merged the semantic fusion mode with the SLAM system to achieve real time fusion and better loop closing performance. The map saving, map loading and localization mode has been completed. To run the new version of the system, please run the shell script "run_C.sh". You are welcome for issueing.
+The system has been updated to the latest version. I have merged the semantic fusion mode with the SLAM system to achieve real time fusion and better loop closing performance. The map saving, map loading and localization modes have been completed. To run the new version of the system, please run the shell script "run_C.sh". You are welcome for issueing.
 
 I have saved the old version of system in branch "version0.0.1".
 
