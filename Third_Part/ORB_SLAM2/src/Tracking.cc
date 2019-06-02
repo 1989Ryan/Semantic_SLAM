@@ -235,7 +235,7 @@ cv::Mat Tracking::GrabImageRGBD(const cv::Mat &imRGB,const cv::Mat &imD, const d
 }
 
 
-cv::Mat Tracking::GrabImageMonocular(const cv::Mat &im, const double &timestamp)
+cv::Mat Tracking::GrabImageMonocular(const cv::Mat &im, const cv::Mat &ca, const double &timestamp)
 {
     mImGray = im;
 
@@ -256,11 +256,11 @@ cv::Mat Tracking::GrabImageMonocular(const cv::Mat &im, const double &timestamp)
 
     if((mState==NOT_INITIALIZED || mState==NO_IMAGES_YET) && mpMap->GetMaxKFid() == 0){
         // cout << "Tracking::GrabImageMonocular : start from scratch." << endl;
-        mCurrentFrame = Frame(mImGray,timestamp,mpIniORBextractor,mpORBVocabulary,mK,mDistCoef,mbf,mThDepth);
+        mCurrentFrame = Frame(mImGray,timestamp,ca,mpIniORBextractor,mpORBVocabulary,mK,mDistCoef,mbf,mThDepth);
     }
     else{
         // cout << "Tracking::GrabImageMonocular : Already initialized for monocular map." << endl;
-        mCurrentFrame = Frame(mImGray,timestamp,mpORBextractorLeft,mpORBVocabulary,mK,mDistCoef,mbf,mThDepth);
+        mCurrentFrame = Frame(mImGray,timestamp,ca,mpORBextractorLeft,mpORBVocabulary,mK,mDistCoef,mbf,mThDepth);
         // cout << "Tracking::GrabImageMonocular : New frame made." << endl;
     }
 

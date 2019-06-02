@@ -153,9 +153,10 @@ void Map::Save ( const string& filename )
     cerr<<"Map.cc :: Map Saving to "<<filename <<endl;
     ofstream f;
     f.open(filename.c_str(), ios_base::out|ios::binary);
-
+    
     //Number of MapPoints
     unsigned long int nMapPoints = mspMapPoints.size();
+    f.write((char*)&nMapPoints, sizeof(nMapPoints));
     //Save MapPoint sequentially
     for ( auto mp: mspMapPoints ){
         //Save MapPoint
@@ -169,6 +170,7 @@ void Map::Save ( const string& filename )
 
     //Grab the index of each MapPoint, count from 0, in which we initialized mmpnMapPointsIdx  
     GetMapPointsIdx(); 
+    
 
     //Print the number of KeyFrames
     cerr <<"Map.cc :: The number of KeyFrames:"<<mspKeyFrames.size()<<endl;
@@ -216,6 +218,7 @@ void Map::SaveMapPoint( ofstream& f, MapPoint* mp)
     f.write((char*)& mpWorldPos.at<float>(0),sizeof(float));
     f.write((char*)& mpWorldPos.at<float>(1),sizeof(float));
     f.write((char*)& mpWorldPos.at<float>(2),sizeof(float));
+    f.write((char*)& mp->tag, sizeof(int));
 }
 
 void Map::SaveMapPointtxt( ofstream & f, MapPoint * mp)
@@ -413,7 +416,7 @@ vector<cv::Mat> Map::GetmpPose()
             P[0] = mp->GetWorldPos().at<float>(k);
         }
         float* P = p.ptr<float>(3);
-        P[0] = mp->mnId;
+        P[0] = mp->tag;
         mspMapPointPose.push_back(p);
         i++;
     }
@@ -425,17 +428,20 @@ MapPoint* Map::LoadMapPoint( ifstream &f )
         // Position and Orientation of the MapPoints.
         cv::Mat Position(3,1,CV_32F);
         long unsigned int id;
+        int tag;
+        //float mlabel[19];
         f.read((char*)&id, sizeof(id));
 
         f.read((char*)&Position.at<float>(0), sizeof(float));
         f.read((char*)&Position.at<float>(1), sizeof(float));
         f.read((char*)&Position.at<float>(2), sizeof(float));
+        f.read((char*)&tag, sizeof(int));
 
         // Initialize a MapPoint, and set its id and Position.
         MapPoint* mp = new MapPoint(Position, this );
         mp->mnId = id;
         mp->SetWorldPos( Position );
-
+        mp->tag = tag;
         return mp;
 }
 

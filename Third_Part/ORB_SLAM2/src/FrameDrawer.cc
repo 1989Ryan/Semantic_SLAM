@@ -21,11 +21,15 @@
 #include "FrameDrawer.h"
 #include "Tracking.h"
 #include<vector>
+#include<algorithm>
+#include<Eigen/Dense>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
 #include<mutex>
+
+typedef cv::Vec<float, 19> Vec19f;
 
 namespace ORB_SLAM2
 {
@@ -350,7 +354,33 @@ void FrameDrawer::Update(Tracking *pTracker)
                     cv::Point3f temp;
                     temp.x = mvCurrentKeys[i].pt.x;
                     temp.y = mvCurrentKeys[i].pt.y;
-                    temp.z = pMP->mnId;
+                    cv::Mat category = pTracker->mCurrentFrame.mcat;
+                    Eigen::Array<float,1,19> pdflabel;                  //bayesian probability distribution
+                    pdflabel << category.at<Vec19f>(temp.y, temp.x)[0],
+                                category.at<Vec19f>(temp.y, temp.x)[1],
+                                category.at<Vec19f>(temp.y, temp.x)[2],
+                                category.at<Vec19f>(temp.y, temp.x)[3],
+                                category.at<Vec19f>(temp.y, temp.x)[4],
+                                category.at<Vec19f>(temp.y, temp.x)[5],
+                                category.at<Vec19f>(temp.y, temp.x)[6],
+                                category.at<Vec19f>(temp.y, temp.x)[7],
+                                category.at<Vec19f>(temp.y, temp.x)[8],
+                                category.at<Vec19f>(temp.y, temp.x)[9],
+                                category.at<Vec19f>(temp.y, temp.x)[10],
+                                category.at<Vec19f>(temp.y, temp.x)[11],
+                                category.at<Vec19f>(temp.y, temp.x)[12],
+                                category.at<Vec19f>(temp.y, temp.x)[13],
+                                category.at<Vec19f>(temp.y, temp.x)[14],
+                                category.at<Vec19f>(temp.y, temp.x)[15],
+                                category.at<Vec19f>(temp.y, temp.x)[16],
+                                category.at<Vec19f>(temp.y, temp.x)[17],
+                                category.at<Vec19f>(temp.y, temp.x)[18];
+                    pMP->label = pMP->label * pdflabel/(pMP->label.matrix().dot(pdflabel.matrix()));    // update bayesian probability distribution
+                    ptrdiff_t i,j;
+                    float max = pMP->label.maxCoeff(&i,&j);         // fatch semantic tag
+                    pMP->tag = j;                                   // enlabel map point
+                    //pMP->label = (int)(*(category.data+category.step[0]*int(temp.y)+category.step[1]*int(temp.x)));
+                    temp.z = pMP->tag;
                     pTracker->mCurrentFrame.GoodKeyPointinfo.push_back(temp);
                     //pTracker->mCurrentFrame.GoodMapPointinfo.
                 }

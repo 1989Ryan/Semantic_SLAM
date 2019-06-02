@@ -41,6 +41,8 @@ MapPoint::MapPoint(const cv::Mat &Pos, KeyFrame *pRefKF, Map* pMap):
     // MapPoints can be created from Tracking and Local Mapping. This mutex avoid conflicts with id.
     unique_lock<mutex> lock(mpMap->mMutexPointCreation);
     mnId=nNextId++;
+    label << 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1;
+    tag = 0;
 }
 
 MapPoint::MapPoint(const cv::Mat &Pos, Map* pMap, Frame* pFrame, const int &idxF):
@@ -68,6 +70,8 @@ MapPoint::MapPoint(const cv::Mat &Pos, Map* pMap, Frame* pFrame, const int &idxF
     // MapPoints can be created from Tracking and Local Mapping. This mutex avoid conflicts with id.
     unique_lock<mutex> lock(mpMap->mMutexPointCreation);
     mnId=nNextId++;
+    label << 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1;
+    tag = 0;
 }
 
 MapPoint::MapPoint(const cv::Mat &Pos, Map* pMap):// When loading map, we redefine MapPoint
@@ -81,6 +85,8 @@ MapPoint::MapPoint(const cv::Mat &Pos, Map* pMap):// When loading map, we redefi
     // MapPoints can be created from Tracking and Local Mapping. This mutex avoid conflicts with id.
     unique_lock<mutex> lock(mpMap->mMutexPointCreation);
     mnId=nNextId++;
+    label << 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1;
+    tag = 0;
 }
 
 void MapPoint::SetWorldPos(const cv::Mat &Pos)
@@ -448,6 +454,17 @@ int MapPoint::PredictScale(const float &currentDist, Frame* pF)
     return nScale;
 }
 
+void updatelabel(MapPoint* pMP, Eigen::Array<float,1,19> newlabel)
+{
+    pMP->label = pMP->label * newlabel/(pMP->label.matrix().dot(newlabel.matrix()));
+    pMP->tag = pMP->grablabel(pMP);
+}
 
+int grablabel(MapPoint* pMP)
+{
+    ptrdiff_t i,j;
+    float max = pMP->label.maxCoeff(&i,&j);
+    return int(j);
+}
 
 } //namespace ORB_SLAM
