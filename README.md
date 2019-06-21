@@ -87,7 +87,7 @@ chmod +x run.sh
 * Run in the TUM dataset
 * ~~Use C++ for ROS node~~
 * ~~Add localization mode~~
-* Add GPS fusion
+* ~~Add GPS fusion~~
 * Run in simulation environment
 * Benchmark in groundtruth
 * Run in XJTU campus
