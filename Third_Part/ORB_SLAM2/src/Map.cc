@@ -224,7 +224,7 @@ void Map::SaveMapPoint( ofstream& f, MapPoint* mp)
 void Map::SaveMapPointtxt( ofstream & f, MapPoint * mp)
 {
     cv::Mat mpWorldPos = mp->GetWorldPos();
-    f<<setprecision(9)<< mpWorldPos.at<float>(0)<<" "<<mpWorldPos.at<float>(1)<<" "<<mpWorldPos.at<float>(2)<<endl;
+    f<<setprecision(9)<< mpWorldPos.at<float>(0)<<" "<<mpWorldPos.at<float>(1)<<" "<<mpWorldPos.at<float>(2)<<" "<<mp->tag<<endl;
 }
 
 void Map::SaveKeyFrame( ofstream &f, KeyFrame* kf )

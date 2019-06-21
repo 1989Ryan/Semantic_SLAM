@@ -1,0 +1,2 @@
+sensor_msgs/Image Image
+sensor_msgs/NavSatFix gps

@@ -104,7 +104,6 @@ public:
             cv::Mat img = cv_ptr->image;
             //int category = int(cv_ptr->image.at<uchar>(int(kp.y), int(kp.x)));
             int category = (int)(*(img.data+img.step[0]*int(kp.y)+img.step[1]*int(kp.x)));
-            cout<<category<<endl;
             vector <float>::iterator iElement = find(id.begin(), id.end(), kp.z);
             if( iElement != id.end() )
             {

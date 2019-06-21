@@ -1,2 +1,2 @@
-std_msgs/Header header 
-geometry_msgs/Pose[] tjy
+nav_msgs/Path tjy
+sensor_msgs/NavSatFix[] gps

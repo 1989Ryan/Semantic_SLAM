@@ -24,6 +24,7 @@
 #include"KeyFrame.h"
 #include"Frame.h"
 #include"Map.h"
+#include<Eigen/Dense>
 
 #include<opencv2/core/core.hpp>
 #include<mutex>
@@ -87,6 +88,8 @@ public:
 
 public:
     long unsigned int mnId;
+    Eigen::Array<float, 1, 19> label;
+    int tag;
     static long unsigned int nNextId;
     long int mnFirstKFid;
     long int mnFirstFrame;
@@ -120,10 +123,6 @@ protected:
 
      // Position in absolute coordinates
      cv::Mat mWorldPos;
-
-     //TODO
-     //Enlabel the mappoint
-     //int label;
 
      // Keyframes observing the point and associated index in keyframe
      std::map<KeyFrame*,size_t> mObservations;

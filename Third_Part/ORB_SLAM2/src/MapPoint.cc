@@ -454,17 +454,5 @@ int MapPoint::PredictScale(const float &currentDist, Frame* pF)
     return nScale;
 }
 
-void updatelabel(MapPoint* pMP, Eigen::Array<float,1,19> newlabel)
-{
-    pMP->label = pMP->label * newlabel/(pMP->label.matrix().dot(newlabel.matrix()));
-    pMP->tag = pMP->grablabel(pMP);
-}
-
-int grablabel(MapPoint* pMP)
-{
-    ptrdiff_t i,j;
-    float max = pMP->label.maxCoeff(&i,&j);
-    return int(j);
-}
 
 } //namespace ORB_SLAM

@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   message_filters
   roscpp
   rospy
+  nav_msgs
   sensor_msgs
   std_msgs
   message_generation
@@ -20,6 +21,9 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
+find_package(cmake_modules REQUIRED)
+find_package(Eigen3 REQUIRED)
+include_directories(${EIGEN3_INCLUDE_DIR})
 
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -57,6 +61,7 @@ find_package(catkin REQUIRED COMPONENTS
    mp.msg
    frame.msg
    tjy.msg
+   img_gps.msg
  )
 
 ## Generate services in the 'srv' folder
@@ -76,7 +81,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
  generate_messages(
    DEPENDENCIES
-   std_msgs sensor_msgs geometry_msgs
+   std_msgs sensor_msgs geometry_msgs nav_msgs
  )
 
 ################################################
@@ -111,7 +116,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 # LIBRARIES map_generator
-  CATKIN_DEPENDS geometry_msgs roscpp rospy sensor_msgs std_msgs message_runtime
+  CATKIN_DEPENDS geometry_msgs nav_msgs roscpp rospy sensor_msgs std_msgs message_runtime
   #  DEPENDS system_lib
 )
 
@@ -136,10 +141,11 @@ include_directories(
 ## either from message generation or dynamic reconfigure
 # add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
+
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
- add_executable(${PROJECT_NAME}_node src/map_generator.cpp)
+ add_executable(${PROJECT_NAME}_node src/map_generator.cpp src/gps_xyz_converter.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the

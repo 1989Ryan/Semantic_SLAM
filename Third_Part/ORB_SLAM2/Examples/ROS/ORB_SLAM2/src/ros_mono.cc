@@ -59,8 +59,9 @@ public:
     void GrabImage(const map_generator::frame::ConstPtr& frame);
     void pubandsub()
     {
-        pub_ = n_.advertise<map_generator::mp>("/map", 1000);
-        pub2 = n_.advertise<nav_msgs::Path>("/trajectory", 1000);
+        pub_ = n_.advertise<sensor_msgs::PointCloud>("/Semantic_Map", 1000);
+        //pub_ = n_.advertise<map_generator::mp>("/map", 1000);
+        pub2 = n_.advertise<map_generator::tjy>("/trajectory", 1000);
         sub_ = n_.subscribe("/result", 1, &ImageGrabber::GrabImage, this);
 
     }
@@ -111,43 +112,45 @@ int main(int argc, char **argv)
     return 0;
 }
 
-bool SortByZ(const cv::Mat &mp1, const cv::Mat &mp2)//注意：本函数的参数的类型一定要与vector中元素的类型一致  
-{   
-    return mp1.at<float>(3) < mp2.at<float>(3);  //升序排列
-}
+//bool SortByZ(const cv::Mat &mp1, const cv::Mat &mp2)//注意：本函数的参数的类型一定要与vector中元素的类型一致  
+//{   
+//    return mp1.at<float>(3) < mp2.at<float>(3);  //升序排列
+//}
 
 void ImageGrabber::GrabImage(const map_generator::frame::ConstPtr& frame)
 {
     // Copy the ros image message to cv::Mat.
-    cv_bridge::CvImageConstPtr cv_ptr;
+    cv_bridge::CvImageConstPtr cv_ptr, class_ptr;
     try
     {
         cv_ptr = cv_bridge::toCvShare(frame->image, frame);
+        class_ptr = cv_bridge::toCvCopy(frame->category);
     }
     catch (cv_bridge::Exception& e)
     {
         ROS_ERROR("cv_bridge exception: %s", e.what());
         return;
     }
-
-    mpSLAM->TrackMonocular(cv_ptr->image,cv_ptr->header.stamp.toSec());
+    mpSLAM->TrackMonocular(cv_ptr->image, class_ptr->image, cv_ptr->header.stamp.toSec());
     if (mpSLAM->GetTrackingState()==2)
     {
         vector<cv::Mat> mppos = mpSLAM->GetTrackedMapPointsPose();
-        vector<cv::Point3f> key = mpSLAM -> GetGoodKeyPoints();
         vector<cv::Mat> tjry = mpSLAM->GetPose();
         int i = 0;
         int num_points = mppos.size();
+        path.poses.clear();
         path.header.stamp=ros::Time::now();
         path.header.frame_id="sensor_frame";
         mpt.header.stamp = ros::Time::now();
         mpt.header.frame_id = "sensor_frame";
         mpt.points.resize(num_points);
         //we'll also add an intensity channel to the cloud
-        mpt.channels.resize(1);
-        mpt.channels[0].name = "rgb";
+        mpt.channels.resize(2);
+        mpt.channels[0].name = "id";
         mpt.channels[0].values.resize(num_points);
-        sort(mppos.begin(), mppos.end(), SortByZ);
+        mpt.channels[1].name = "rgb";
+        mpt.channels[1].values.resize(num_points);
+        //sort(mppos.begin(), mppos.end(), SortByZ);
         geometry_msgs::PoseStamped this_pose_stamped;
         for(auto t:tjry)
         {
@@ -158,7 +161,6 @@ void ImageGrabber::GrabImage(const map_generator::frame::ConstPtr& frame)
             this_pose_stamped.pose.orientation.y = t.at<float>(4);
             this_pose_stamped.pose.orientation.z = t.at<float>(5);
             this_pose_stamped.pose.orientation.w = t.at<float>(6);
-
             this_pose_stamped.header.stamp=path.header.stamp;
             this_pose_stamped.header.frame_id="sensor_frame";
             path.poses.push_back(this_pose_stamped);
@@ -168,31 +170,15 @@ void ImageGrabber::GrabImage(const map_generator::frame::ConstPtr& frame)
             mpt.points[i].x = mp.at<float>(0);
             mpt.points[i].y = mp.at<float>(1);
             mpt.points[i].z = mp.at<float>(2);
-            mpt.channels[0].values[i] = mp.at<float>(3);
+            mpt.channels[0].values[i] = mp.at<float>(3)*100;
+            if(mpt.channels[0].values[i]>1901) mpt.channels[0].values[i]= 0;
             i++;
         }
         i = 0;
-        kpt.points.resize(key.size());
-        kpt.header.stamp = mpt.header.stamp;
-        kpt.header.frame_id = "keypoint_frame";
-        //we'll also add an intensity channel to the cloud
-        kpt.channels.resize(1);
-        kpt.channels[0].name = "rgb";
-        kpt.channels[0].values.resize(key.size());
-        for(auto k: key)
-        {
-            kpt.points[i].x = k.x;
-            kpt.points[i].y = k.y;
-            kpt.points[i].z = k.z;
-            //cout<<kp.kp[i].x <<" "<<kp.kp[i].y<<endl;
-            i ++;
-        }
-        i = 0;
-        map.mpt = mpt;
-        map.kpt = kpt;
-        map.currentframe = frame->category;
-        pub_.publish(map);
-        pub2.publish(path);
+        tj.tjy = path;
+        tj.gps.push_back(frame->gps);
+        pub_.publish(mpt);
+        pub2.publish(tj);
     }
 }
 
