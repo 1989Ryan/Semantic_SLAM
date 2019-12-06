@@ -6,11 +6,9 @@ This on-going project is Semantic SLAM using ROS, ORB SLAM and PSPNet101. It wil
 
 Now the visualized semantic map with topological information is reachable, where yellow represents buildings and constructions, green represents vegetation, blue represents vehicles, and red represents roads and sidewalks. The cube is ambiguous building location and green line is the trajectory. You can visualize these information using Rviz. 
 
-![semantic SLAM](semantic_map.png)
+![semantic SLAM](real-time.gif)
 
 You can also get the semantic topological map which only contains the ambiguous building location and trajectory.
-
-![semantic topological map](Topological_Semantic_Map.png)
 
 The whole ROS communication structure of the project is shown below.
 
