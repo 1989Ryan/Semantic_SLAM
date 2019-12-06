@@ -20,7 +20,8 @@ The whole ROS communication structure of the project is shown below.
 
 If you are going to use our work in your research, please use the citation below.
 
-``
+```
+
 @INPROCEEDINGS{8901910,
 author={Z. {Zhao} and Y. {Mao} and Y. {Ding} and P. {Ren} and N. {Zheng}},
 booktitle={2019 2nd China Symposium on Cognitive Computing and Hybrid Intelligence (CCHI)},
@@ -33,7 +34,8 @@ keywords={Semantic SLAM;Visual SLAM;Large-Scale SLAM;Semantic Segmentation;Landm
 doi={10.1109/CCHI.2019.8901910},
 ISSN={null},
 month={Sep.},}
-``
+
+```
 
 ## New Update!
 
