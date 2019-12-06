@@ -16,6 +16,25 @@ The whole ROS communication structure of the project is shown below.
 
 ![structure](graph.png)
 
+## Bibliograhpy
+
+If you are going to use our work in your research, please use the citation below.
+
+``
+@INPROCEEDINGS{8901910,
+author={Z. {Zhao} and Y. {Mao} and Y. {Ding} and P. {Ren} and N. {Zheng}},
+booktitle={2019 2nd China Symposium on Cognitive Computing and Hybrid Intelligence (CCHI)},
+title={Visual-Based Semantic SLAM with Landmarks for Large-Scale Outdoor Environment},
+year={2019},
+volume={},
+number={},
+pages={149-154},
+keywords={Semantic SLAM;Visual SLAM;Large-Scale SLAM;Semantic Segmentation;Landmark-level Semantic Mapping},
+doi={10.1109/CCHI.2019.8901910},
+ISSN={null},
+month={Sep.},}
+``
+
 ## New Update!
 
 The system has been updated to the latest version. I have merged the semantic fusion mode with the SLAM system to achieve real time fusion and better loop closing performance. The map saving, map loading and localization modes have been completed. To run the new version of the system, please run the shell script "run_C.sh". You are welcome for issueing.
