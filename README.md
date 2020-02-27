@@ -1,6 +1,6 @@
 # Semantic SLAM
 
-![license](https://img.shields.io/bower/l/bootstrap.svg?color=blue) <a href="https://996.icu"><img src="https://img.shields.io/badge/link-996.icu-red.svg" alt="996.icu" /></a>
+![license](https://img.shields.io/bower/l/bootstrap.svg?color=blue) 
 
 This on-going project is Semantic SLAM using ROS, ORB SLAM and PSPNet101. It will be used in autonomous robotics for semantic understanding and navigation.
 
