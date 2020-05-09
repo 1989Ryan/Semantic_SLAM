@@ -20,7 +20,7 @@ If you are going to use our work in your research, please use the citation below
 
 ```
 
-@INPROCEEDINGS{8901910,
+@INPROCEEDINGS{zhao2019slam,
 author={Z. {Zhao} and Y. {Mao} and Y. {Ding} and P. {Ren} and N. {Zheng}},
 booktitle={2019 2nd China Symposium on Cognitive Computing and Hybrid Intelligence (CCHI)},
 title={Visual-Based Semantic SLAM with Landmarks for Large-Scale Outdoor Environment},
